@@ -5,13 +5,15 @@ import type {
 } from '@/types/api/user'
 
 export const userService = {
-  async getUserInformation({
-    email,
-  }: UserLoginInformationRequest): Promise<UserLoginInformationResponse> {
+  async getUserInformation(
+    { email }: UserLoginInformationRequest,
+    token: string,
+  ): Promise<UserLoginInformationResponse> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/user/user-information`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         email,

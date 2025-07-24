@@ -9,6 +9,8 @@ import type {
 } from '@/types/api/sales-analytics'
 import type { SKURefundRateRequest, SKURefundRateResponse } from '@/types/api/sales-analytics'
 import type { SalesAnalyticsState } from '../types/sales'
+import type { RootGetters } from '../types'
+import { salesAnalyticsService } from '@/services/sales-analytics-service'
 
 export const salesAnalyticsModule = {
   state: () => ({
@@ -21,23 +23,30 @@ export const salesAnalyticsModule = {
       state: SalesAnalyticsState,
       dailySalesOverview: DailySalesOverviewResponse,
     ) {
-      state.dailySalesOverview = dailySalesOverview
+      state.dailySalesOverview = dailySalesOverview.Data
     },
     setDailySalesSKUList(state: SalesAnalyticsState, dailySalesSKUList: DailySalesSKUListResponse) {
-      state.dailySalesSKUList = dailySalesSKUList
+      state.dailySalesSKUList = dailySalesSKUList.Data
     },
     setSKURefundRate(state: SalesAnalyticsState, skuRefundRate: SKURefundRateResponse) {
-      state.skuRefundRate = skuRefundRate
+      state.skuRefundRate = skuRefundRate.Data
     },
   },
   actions: {
-    fetchDailySalesOverview(
-      { commit }: { commit: Commit },
+    async fetchDailySalesOverview(
+      { commit, rootGetters }: { commit: Commit; rootGetters: RootGetters },
       dailySalesOverview: DailySalesOverviewRequest,
     ) {
-      commit('setDailySalesOverview', dailySalesOverview)
+      const token = rootGetters['getAccessToken']
+      if (!token) {
+        return
+      }
+      const response = await salesAnalyticsService.getDailySalesOverview(dailySalesOverview, token)
+      if (response.ApiStatusCode === 200) {
+        commit('setDailySalesOverview', response)
+      }
     },
-    fetchDailySalesSKUList(
+    async fetchDailySalesSKUList(
       { commit }: { commit: Commit },
       dailySalesSKUList: DailySalesSKUListRequest,
     ) {

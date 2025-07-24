@@ -8,17 +8,15 @@ import type {
 } from '@/types/api/sales-analytics'
 
 export const salesAnalyticsService = {
-  async getDailySalesOverview({
-    marketplace,
-    sellerId,
-    requestStatus,
-    day,
-    excludeYoYData,
-  }: DailySalesOverviewRequest): Promise<DailySalesOverviewResponse> {
+  async getDailySalesOverview(
+    { marketplace, sellerId, requestStatus, day, excludeYoYData }: DailySalesOverviewRequest,
+    token: string,
+  ): Promise<DailySalesOverviewResponse> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/data/daily-sales-overview/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         marketplace,
@@ -31,19 +29,23 @@ export const salesAnalyticsService = {
     const data = await response.json()
     return data
   },
-  async getDailySalesSKUList({
-    marketplace,
-    sellerId,
-    salesDate,
-    salesDate2,
-    pageSize,
-    pageNumber,
-    isDaysCompare,
-  }: DailySalesSKUListRequest): Promise<DailySalesSKUListResponse> {
+  async getDailySalesSKUList(
+    {
+      marketplace,
+      sellerId,
+      salesDate,
+      salesDate2,
+      pageSize,
+      pageNumber,
+      isDaysCompare,
+    }: DailySalesSKUListRequest,
+    token: string,
+  ): Promise<DailySalesSKUListResponse> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/data/daily-sales-sku-list/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         marketplace,
@@ -58,16 +60,15 @@ export const salesAnalyticsService = {
     const data = await response.json()
     return data
   },
-  async getSKURefundRate({
-    marketplace,
-    sellerId,
-    skuList,
-    requestedDay,
-  }: SKURefundRateRequest): Promise<SKURefundRateResponse> {
+  async getSKURefundRate(
+    { marketplace, sellerId, skuList, requestedDay }: SKURefundRateRequest,
+    token: string,
+  ): Promise<SKURefundRateResponse> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/data/sku-refund-rate/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         marketplace,

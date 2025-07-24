@@ -1,6 +1,6 @@
 export type UserLogoutResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: string
 }
@@ -11,7 +11,7 @@ export type UserLoginInformationRequest = {
 
 export type UserLoginInformationResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: {
     token: string

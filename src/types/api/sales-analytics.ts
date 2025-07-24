@@ -8,7 +8,7 @@ export type DailySalesOverviewRequest = {
 
 export type DailySalesOverviewResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: {
     Currency: string
@@ -42,7 +42,7 @@ export type DailySalesSKUListRequest = {
 
 export type DailySalesSKUListResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: {
     Currency: string

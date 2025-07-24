@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useStore } from 'vuex'
+import { useTypedStore } from '@/store'
 import type { AccessTokenResponse } from '@/types/api/oauth'
 import { useRouter } from 'vue-router'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-const { dispatch } = useStore()
+const { dispatch } = useTypedStore()
 
 const router = useRouter()
 
@@ -65,7 +65,7 @@ const login = () => {
         </div>
         <div class="flex flex-col gap-1">
           <button
-            class="p-2 px-4 bg-blue-500 text-white rounded cursor-pointer flex flex-row items-center gap-1"
+            class="p-2 px-4 bg-blue-500 text-white rounded cursor-pointer flex flex-row items-center justify-center gap-1"
             type="submit"
             :disabled="loading"
           >

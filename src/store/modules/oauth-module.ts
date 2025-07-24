@@ -6,10 +6,14 @@ import type { AccessTokenResponse } from '@/types/api/oauth'
 export const oauthModule = {
   state: () => ({
     oauthData: null,
+    email: '',
   }),
   mutations: {
     setOauthData(state: OauthState, data: AccessTokenResponse['Data']) {
       state.oauthData = data
+    },
+    setEmail(state: OauthState, email: string) {
+      state.email = email
     },
   },
   actions: {
@@ -28,13 +32,17 @@ export const oauthModule = {
       })
       if (response.ApiStatusCode === 200) {
         commit('setOauthData', response.Data)
+        commit('setEmail', email)
       }
       return response
     },
   },
   getters: {
-    getOauthData(state: OauthState) {
+    getAccessToken(state: OauthState) {
       return state.oauthData?.AccessToken
+    },
+    getEmail(state: OauthState) {
+      return state.email
     },
   },
 }
