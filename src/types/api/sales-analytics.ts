@@ -13,23 +13,47 @@ export type DailySalesOverviewResponse = {
   Data: {
     Currency: string
     item: Array<{
-      date: string
-      amount: number
-      orderCount: number
-      unitCount: number
-      avgSalesPrev30Days: number
-      prevYearDate: string
-      prevYearAmount: number
-      prevYearOrderCount: number
-      prevYearUnitCount: number
-      prevYearAvgSalesPrev30Days: number
-      profit: number
-      yoy30DailySalesGrowth: number
       acos: number
+      advertisingCost: number
+      amazonExpense: number
+      amount: number
+      avgAdvertisingCostPrev30Days: number
+      avgProfitPrev30Days: number
+      avgSalesPrev30Days: number
+      cogs: number
+      date: string
+      fbaAmount: number
+      fbaOrderCount: number
+      fbaShippingAmount: number
+      fbaUnitCount: number
+      fbmAmount: number
+      fbmOrderCount: number
+      fbmShippingAmount: number
+      fbmUnitCount: number
+      orderCount: number
+      otherFee: number
+      prevYearAmount: number
+      prevYearAvgSalesPrev30Days: number
+      prevYearDate: number
+      prevYearFbaAmount: number
+      prevYearFbaShippingAmount: number
+      prevYearFbmAmount: number
+      prevYearFbmShippingAmount: number
+      prevYearOrderCount: number
+      prevYearShippingAmount: number
+      prevYearUnitCount: number
+      profit: number
+      refundTotalAmount: number
+      shippingAmount: number
+      totalExpense: number
+      totalVatAmount: number
+      unitCount: number
+      yoy30DailySalesGrowth: number
     }>
     isYoyExist: boolean
   }
 }
+
 export type DailySalesSKUListRequest = {
   marketplace: string
   sellerId: string
@@ -46,7 +70,7 @@ export type DailySalesSKUListResponse = {
   ApiStatusMessage: string
   Data: {
     Currency: string
-    item: Array<{
+    item: {
       selectedDate: string
       TotalSale: number
       skuList: Array<{
@@ -61,7 +85,7 @@ export type DailySalesSKUListResponse = {
       }>
       selectedDate2: string
       TotalSale2: number
-    }>
+    }
   }
 }
 
@@ -74,7 +98,7 @@ export type SKURefundRateRequest = {
 
 export type SKURefundRateResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: {
     item: Array<{

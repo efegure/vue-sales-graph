@@ -47,13 +47,30 @@ export const salesAnalyticsModule = {
       }
     },
     async fetchDailySalesSKUList(
-      { commit }: { commit: Commit },
+      { commit, rootGetters }: { commit: Commit; rootGetters: RootGetters },
       dailySalesSKUList: DailySalesSKUListRequest,
     ) {
-      commit('setDailySalesSKUList', dailySalesSKUList)
+      const token = rootGetters['getAccessToken']
+      if (!token) {
+        return
+      }
+      const response = await salesAnalyticsService.getDailySalesSKUList(dailySalesSKUList, token)
+      if (response.ApiStatusCode === 200) {
+        commit('setDailySalesSKUList', response)
+      }
     },
-    fetchSKURefundRate({ commit }: { commit: Commit }, skuRefundRate: SKURefundRateRequest) {
-      commit('setSKURefundRate', skuRefundRate)
+    async fetchSKURefundRate(
+      { commit, rootGetters }: { commit: Commit; rootGetters: RootGetters },
+      skuRefundRate: SKURefundRateRequest,
+    ) {
+      const token = rootGetters['getAccessToken']
+      if (!token) {
+        return
+      }
+      const response = await salesAnalyticsService.getSKURefundRate(skuRefundRate, token)
+      if (response.ApiStatusCode === 200) {
+        commit('setSKURefundRate', response)
+      }
     },
   },
   getters: {
