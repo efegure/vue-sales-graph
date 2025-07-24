@@ -2,7 +2,7 @@ import type { AccessTokenRequest } from '@/types/api/oauth'
 import type { AccessTokenResponse } from '@/types/api/oauth'
 
 export const oauthService = {
-  async login({
+  async fetchAccessToken({
     Email,
     Password,
     GrantType,

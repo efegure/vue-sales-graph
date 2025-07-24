@@ -10,7 +10,7 @@ export type AccessTokenRequest = {
 
 export type AccessTokenResponse = {
   ApiStatus: boolean
-  ApiStatusCode: string
+  ApiStatusCode: number
   ApiStatusMessage: string
   Data: {
     AccessToken: string

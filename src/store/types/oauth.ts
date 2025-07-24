@@ -1,3 +1,5 @@
+import type { AccessTokenResponse } from '@/types/api/oauth'
+
 export type OauthState = {
-  accessToken: string | null
+  oauthData: AccessTokenResponse['Data'] | null
 }
