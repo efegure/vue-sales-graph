@@ -1,0 +1,9 @@
+import type { DailySalesOverviewResponse } from '@/types/api/sales-analytics'
+import type { DailySalesSKUListResponse } from '@/types/api/sales-analytics'
+import type { SKURefundRateResponse } from '@/types/api/sales-analytics'
+
+export type SalesAnalyticsState = {
+  dailySalesOverview: DailySalesOverviewResponse | null
+  dailySalesSKUList: DailySalesSKUListResponse | null
+  skuRefundRate: SKURefundRateResponse | null
+}
