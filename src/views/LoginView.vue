@@ -43,11 +43,14 @@ const login = () => {
 }
 </script>
 <template>
-  <div class="mx-8 my-12 h-full">
+  <div class="px-8 py-12 h-full">
     <div class="flex flex-col justify-center items-center h-full w-full gap-8">
-      <h1 class="text-3xl font-bold">Login page</h1>
+      <form
+        class="flex flex-col gap-4 max-w-[400px] mx-auto w-full py-8 px-6 border border-gray-200 rounded-xl shadow-xl"
+        @submit.prevent="login"
+      >
+        <h1 class="text-2xl font-bold text-center">Login to your account</h1>
 
-      <form class="flex flex-col gap-4 max-w-[400px] mx-auto w-full" @submit.prevent="login">
         <InputField
           v-model="email"
           placeholder="Email"

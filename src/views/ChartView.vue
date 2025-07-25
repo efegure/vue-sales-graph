@@ -149,8 +149,8 @@ watch(
 
       <SKUTable
         v-if="
-          getters.getDailySalesSKUList.item.skuList.length > 0 &&
-          getters.getSKURefundRate.length > 0
+          getters.getDailySalesSKUList?.item?.skuList?.length > 0 &&
+          getters.getSKURefundRate?.length > 0
         "
         :skuList="getters.getDailySalesSKUList"
         :pageSize="10"
