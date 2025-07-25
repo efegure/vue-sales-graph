@@ -16,13 +16,13 @@ defineEmits(['getNextPages', 'nextPage', 'prevPage'])
 const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
 </script>
 <template>
-  <div class="overflow-x-auto">
-    <table>
+  <div class="w-full">
+    <table class="w-full">
       <thead>
         <tr class="bg-gray-200">
           <th class="text-left p-2">SKU</th>
           <th class="text-left p-2">Product Name</th>
-          <th>
+          <th class="p-2">
             <div class="flex flex-col items-end">
               <span>{{ selectedDates[0] }}</span>
               <span>Sales / Units</span>
@@ -30,14 +30,14 @@ const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
             </div>
           </th>
 
-          <th v-if="displayAdditionalColumn">
+          <th class="p-2" v-if="displayAdditionalColumn">
             <div class="flex flex-col items-end">
               <span>{{ selectedDates[1] }}</span>
               <span>Sales / Units</span>
               <span class="text-right">Average Selling Price</span>
             </div>
           </th>
-          <th class="text-right pr-2">
+          <th class="p-2 text-right pr-2">
             <div class="flex flex-col items-end">
               <span>SKU Refund Rate</span>
               <span class="text-xs font-normal">( Last 30 days )</span>
@@ -48,7 +48,7 @@ const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
       <tbody>
         <tr
           class="p-4 even:bg-gray-100"
-          v-for="(sku, index) in skuList.item.skuList.slice(
+          v-for="(sku, index) in skuList?.item?.skuList.slice(
             (currentPage - 1) * pageSize,
             currentPage * pageSize,
           )"
@@ -84,7 +84,9 @@ const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
               <span>{{ sku.amount2 / sku.qty2 || '-' }}</span>
             </div>
           </td>
-          <td class="p-2 font-medium text-sm text-right">{{ skuRefundRate[index].refundRate }}%</td>
+          <td class="p-2 font-medium text-sm text-right">
+            {{ skuRefundRate[index]?.refundRate }}%
+          </td>
         </tr>
       </tbody>
     </table>

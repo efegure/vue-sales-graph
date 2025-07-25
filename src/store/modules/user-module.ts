@@ -1,4 +1,4 @@
-import type { Commit } from 'vuex'
+import type { Commit, Dispatch } from 'vuex'
 import type { UserState } from '../types/user'
 import type { UserLoginInformationResponse } from '@/types/api/user'
 import { userService } from '@/services/user-service'
@@ -11,6 +11,9 @@ export const userModule = {
   mutations: {
     setUserLoginInformation(state: UserState, userLoginInformation: UserLoginInformationResponse) {
       state.userLoginInformation = userLoginInformation.Data
+    },
+    resetState(state: UserState) {
+      state.userLoginInformation = null
     },
   },
   actions: {
@@ -32,8 +35,25 @@ export const userModule = {
       }
       return response
     },
-    logout({ commit }: { commit: Commit }) {
-      commit('setUserLoginInformation', null)
+    async logout({
+      commit,
+      dispatch,
+      rootGetters,
+    }: {
+      commit: Commit
+      dispatch: Dispatch
+      rootGetters: RootGetters
+    }) {
+      const token = rootGetters['getAccessToken']
+      if (!token) {
+        return
+      }
+      const response = await userService.logout(token)
+      if (response.ApiStatusCode === 200) {
+        commit('resetState')
+        dispatch('resetOAuthData')
+        dispatch('resetSalesData')
+      }
     },
   },
   getters: {

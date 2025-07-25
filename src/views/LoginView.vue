@@ -4,6 +4,7 @@ import { useTypedStore } from '@/store'
 import type { AccessTokenResponse } from '@/types/api/oauth'
 import { useRouter } from 'vue-router'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import InputField from '@/components/common/InputField.vue'
 const { dispatch } = useTypedStore()
 
 const router = useRouter()
@@ -12,9 +13,11 @@ const email = ref('')
 const password = ref('')
 const displayError = ref(false)
 const loading = ref(false)
+const submittedOnce = ref(false)
 
 const login = () => {
   console.log(email.value, password.value)
+  submittedOnce.value = true
   if (email.value.length === 0 || password.value.length === 0) {
     displayError.value = true
     return
@@ -45,24 +48,18 @@ const login = () => {
       <h1 class="text-3xl font-bold">Login page</h1>
 
       <form class="flex flex-col gap-4 max-w-[400px] mx-auto w-full" @submit.prevent="login">
-        <div class="flex flex-col gap-1">
-          <input
-            v-model="email"
-            class="p-2 border border-gray-300 rounded"
-            type="text"
-            placeholder="Email"
-          />
-          <span class="text-red-500" v-if="email.length === 0">Email is required</span>
-        </div>
-        <div class="flex flex-col gap-1">
-          <input
-            v-model="password"
-            class="p-2 border border-gray-300 rounded"
-            type="password"
-            placeholder="Password"
-          />
-          <span class="text-red-500" v-if="password.length === 0">Password is required</span>
-        </div>
+        <InputField
+          v-model="email"
+          placeholder="Email"
+          :displayError="submittedOnce"
+          type="email"
+        />
+        <InputField
+          v-model="password"
+          placeholder="Password"
+          :displayError="submittedOnce"
+          type="password"
+        />
         <div class="flex flex-col gap-1">
           <button
             class="p-2 px-4 bg-blue-500 text-white rounded cursor-pointer flex flex-row items-center justify-center gap-1"
@@ -72,7 +69,9 @@ const login = () => {
             <LoadingSpinner v-if="loading" />
             <span>{{ loading ? 'Loading...' : 'Login' }}</span>
           </button>
-          <span class="text-red-500" v-if="displayError">Invalid email or password</span>
+          <span class="text-red-500" v-if="displayError && submittedOnce"
+            >Invalid email or password</span
+          >
         </div>
       </form>
     </div>

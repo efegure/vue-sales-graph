@@ -43,6 +43,11 @@ export const salesAnalyticsModule = {
         ...dailySalesSKUList.Data.item.skuList,
       ]
     },
+    resetState(state: SalesAnalyticsState) {
+      state.dailySalesOverview = null
+      state.dailySalesSKUList = null
+      state.skuRefundRate = null
+    },
   },
   actions: {
     async fetchDailySalesOverview(
@@ -88,6 +93,9 @@ export const salesAnalyticsModule = {
       if (response.ApiStatusCode === 200) {
         commit('setSKURefundRate', response)
       }
+    },
+    resetSalesData({ commit }: { commit: Commit }) {
+      commit('resetState')
     },
   },
   getters: {

@@ -36,10 +36,17 @@ export const oauthModule = {
       }
       return response
     },
+    resetOAuthData({ commit }: { commit: Commit }) {
+      commit('setOauthData', null)
+      commit('setEmail', '')
+    },
   },
   getters: {
     getAccessToken(state: OauthState) {
       return state.oauthData?.AccessToken
+    },
+    getTokenExpiration(state: OauthState) {
+      return state.oauthData?.ExpiresAt
     },
     getEmail(state: OauthState) {
       return state.email

@@ -22,9 +22,13 @@ export const userService = {
     const data = await response.json()
     return data
   },
-  async logout(): Promise<UserLogoutResponse> {
+  async logout(token: string): Promise<UserLogoutResponse> {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/user/logout`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     })
     const data = await response.json()
     return data

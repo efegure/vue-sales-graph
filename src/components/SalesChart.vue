@@ -1,35 +1,19 @@
 <script setup lang="ts">
 import { Chart } from 'highcharts-vue'
 import { type Options, type PointClickEventObject } from 'highcharts'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { DailySalesOverviewResponse } from '@/types/api/sales-analytics'
-
-const selectedColumnIndexes = ref<number[]>([])
 
 const props = defineProps<{
   data: DailySalesOverviewResponse['Data'] | null
+  selectedColumnIndexes: number[]
 }>()
 const emit = defineEmits<{
-  columnSelect: [indexes: number[]]
+  columnSelect: [indexes: PointClickEventObject]
 }>()
 
 const handleColumnClick = (event: PointClickEventObject) => {
-  const columnIndex = event.point.x
-  const isSelected = selectedColumnIndexes.value.includes(columnIndex)
-
-  if (isSelected) {
-    selectedColumnIndexes.value = selectedColumnIndexes.value.filter((i) => i !== columnIndex)
-  } else {
-    if (selectedColumnIndexes.value.length < 2) {
-      selectedColumnIndexes.value.push(columnIndex)
-    } else {
-      const newSelections = [...selectedColumnIndexes.value]
-      newSelections.shift()
-      newSelections.push(columnIndex)
-      selectedColumnIndexes.value = newSelections
-    }
-  }
-  emit('columnSelect', selectedColumnIndexes.value)
+  emit('columnSelect', event)
 }
 
 const chartOptions = computed<Options>(() => {
@@ -37,7 +21,7 @@ const chartOptions = computed<Options>(() => {
   const currency = props.data?.Currency ?? ''
   const categories = items.map((d) => new Date(d.date).toLocaleDateString())
 
-  const plotBands = selectedColumnIndexes.value.map((index) => ({
+  const plotBands = props.selectedColumnIndexes.map((index) => ({
     from: index - 0.5,
     to: index + 0.5,
     color: 'rgba(211,211,211,0.3)',
@@ -52,7 +36,7 @@ const chartOptions = computed<Options>(() => {
         return {
           x: index,
           y: d.profit,
-          selected: selectedColumnIndexes.value.includes(index),
+          selected: props.selectedColumnIndexes.includes(index),
         }
       }),
     },
@@ -63,7 +47,7 @@ const chartOptions = computed<Options>(() => {
         return {
           x: index,
           y: d.fbaAmount,
-          selected: selectedColumnIndexes.value.includes(index),
+          selected: props.selectedColumnIndexes.includes(index),
         }
       }),
     },
@@ -74,7 +58,7 @@ const chartOptions = computed<Options>(() => {
         return {
           x: index,
           y: d.fbmAmount,
-          selected: selectedColumnIndexes.value.includes(index),
+          selected: props.selectedColumnIndexes.includes(index),
         }
       }),
     },
@@ -111,11 +95,8 @@ const chartOptions = computed<Options>(() => {
     },
     tooltip: {
       formatter: function () {
-        // debugger
         const currentData = items[this.index]
         const total = currentData.fbaAmount + currentData.fbmAmount
-        // const point = this.point
-        // const seriesName = this.series.name
         return `
         <span>Total Sales: <b>${total}</b></span>
         <span>Shipping: <b>${currentData.shippingAmount}</b></span>
@@ -124,8 +105,6 @@ const chartOptions = computed<Options>(() => {
         <span>FBM Sales: <b>${currentData.fbmAmount}</b></span>
         `
       },
-      //   headerFormat: '<b>{point.x}</b><br/>',
-      //   pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
     },
     plotOptions: {
       series: {
@@ -163,5 +142,4 @@ const chartOptions = computed<Options>(() => {
 
 <template>
   <Chart :options="chartOptions" />
-  <!-- <strong>Selected Column Indexes:</strong> {{ selectedColumnIndexes.join(', ') }} -->
 </template>

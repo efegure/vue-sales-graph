@@ -20,4 +20,7 @@ const app = createApp(App)
 app.use(router)
 app.use(store, key)
 
+// for router guard
+app.provide('store', store)
+
 app.mount('#app')
