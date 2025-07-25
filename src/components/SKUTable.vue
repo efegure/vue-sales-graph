@@ -10,6 +10,7 @@ const props = defineProps<{
   currentPage: number
   nextPageLoading: boolean
   selectedDates: string[]
+  isLastPage: boolean
 }>()
 
 defineEmits(['getNextPages', 'nextPage', 'prevPage'])
@@ -103,6 +104,7 @@ const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
         {{ currentPage }}
       </button>
       <button
+        v-if="!isLastPage"
         class="p-2 border border-gray-300 rounded"
         @click="
           () => {

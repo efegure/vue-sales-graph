@@ -17,6 +17,7 @@ const selectedColumns = ref<number[]>([])
 const currentApiPage = ref(1)
 const nextPageLoading = ref(false)
 const pageSize = ref(30)
+const isLastPage = ref(false)
 // Table page displays 10 elements per requirement
 const currentTablePage = ref(1)
 
@@ -38,6 +39,7 @@ const handleColumnSelect = (event: PointClickEventObject) => {
   }
   currentApiPage.value = 1
   currentTablePage.value = 1
+  isLastPage.value = false
 }
 const selectedDates = computed(() => {
   return [...selectedColumns.value]
@@ -78,6 +80,9 @@ watch([currentApiPage, selectedDates], () => {
       //open next page if it exists
       currentTablePage.value += 1
     }
+    if (nextPageElementsLength === 0) {
+      isLastPage.value = true
+    }
     nextPageLoading.value = false
   })
 })
@@ -87,6 +92,7 @@ watch(
     selectedColumns.value = []
     currentApiPage.value = 1
     currentTablePage.value = 1
+    isLastPage.value = false
     fetchSales()
   },
 )
@@ -118,6 +124,7 @@ watch(
         Logout
       </button>
     </div>
+    {{ isLastPage }}
     <div class="flex flex-col gap-4 border border-gray-200 shadow-md p-4 rounded-xl gap-8">
       <div class="relative flex flex-row items-center justify-center">
         <h2 class="text-2xl font-bold">Daily Sales</h2>
@@ -139,8 +146,12 @@ watch(
         @columnSelect="handleColumnSelect"
         :selectedColumnIndexes="selectedColumns"
       />
+
       <SKUTable
-        v-if="getters.getDailySalesSKUList && getters.getSKURefundRate"
+        v-if="
+          getters.getDailySalesSKUList.item.skuList.length > 0 &&
+          getters.getSKURefundRate.length > 0
+        "
         :skuList="getters.getDailySalesSKUList"
         :pageSize="10"
         :currentPage="currentTablePage"
@@ -150,6 +161,7 @@ watch(
         :nextPageLoading="nextPageLoading"
         :skuRefundRate="getters.getSKURefundRate"
         :selectedDates="selectedDates"
+        :isLastPage="isLastPage"
       />
     </div>
   </div>

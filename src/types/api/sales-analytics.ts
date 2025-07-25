@@ -89,7 +89,9 @@ export type SKURefundRateRequest = {
   requestedDay: number
 }
 
-export type SKURefundRateResponse = APIResponse<{
-  sku: string
-  refundRate: number
-}>
+export type SKURefundRateResponse = APIResponse<
+  Array<{
+    sku: string
+    refundRate: number
+  }>
+>
