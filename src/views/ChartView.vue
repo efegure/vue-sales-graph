@@ -124,7 +124,6 @@ watch(
         Logout
       </button>
     </div>
-    {{ isLastPage }}
     <div class="flex flex-col gap-4 border border-gray-200 shadow-md p-4 rounded-xl gap-8">
       <div class="relative flex flex-row items-center justify-center">
         <h2 class="text-2xl font-bold">Daily Sales</h2>

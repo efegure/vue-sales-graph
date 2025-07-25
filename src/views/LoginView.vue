@@ -72,7 +72,7 @@ const login = () => {
             <LoadingSpinner v-if="loading" />
             <span>{{ loading ? 'Loading...' : 'Login' }}</span>
           </button>
-          <span class="text-red-500" v-if="displayError && submittedOnce"
+          <span class="text-red-500 font-medium" v-if="displayError && submittedOnce"
             >Invalid email or password</span
           >
         </div>
