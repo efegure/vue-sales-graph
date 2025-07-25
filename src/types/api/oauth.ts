@@ -1,3 +1,5 @@
+import type { APIResponse } from '.'
+
 export type AccessTokenRequest = {
   Email: string
   Password: string
@@ -8,14 +10,9 @@ export type AccessTokenRequest = {
   RedirectUri: string
 }
 
-export type AccessTokenResponse = {
-  ApiStatus: boolean
-  ApiStatusCode: number
-  ApiStatusMessage: string
-  Data: {
-    AccessToken: string
-    RefreshToken: string
-    TokenType: string
-    ExpiresAt: string
-  }
-}
+export type AccessTokenResponse = APIResponse<{
+  AccessToken: string
+  RefreshToken: string
+  TokenType: string
+  ExpiresAt: string
+}>
