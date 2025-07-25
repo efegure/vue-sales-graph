@@ -1,3 +1,8 @@
+## Recommended Node Version
+
+v22.14.0
+yarn v1.22.22
+
 # sales-graph
 
 This template should help get you started developing with Vue 3 in Vite.
