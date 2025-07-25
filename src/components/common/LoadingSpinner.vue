@@ -6,7 +6,7 @@
       fill="none"
       r="200"
       stroke-width="50"
-      stroke="#FFFFFF"
+      stroke="#808080"
       stroke-dasharray="516 1400"
     />
   </svg>

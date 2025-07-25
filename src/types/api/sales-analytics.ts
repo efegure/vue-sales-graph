@@ -12,6 +12,7 @@ export type DailySalesOverviewResponse = {
   ApiStatusMessage: string
   Data: {
     Currency: string
+    // different from swagger ! missing a lot of properties in swagger docs
     item: Array<{
       acos: number
       advertisingCost: number
@@ -100,10 +101,9 @@ export type SKURefundRateResponse = {
   ApiStatus: boolean
   ApiStatusCode: number
   ApiStatusMessage: string
-  Data: {
-    item: Array<{
-      sku: string
-      refundRate: number
-    }>
-  }
+  Data: // different from swagger !
+  Array<{
+    sku: string
+    refundRate: number
+  }>
 }

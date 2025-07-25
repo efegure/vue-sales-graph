@@ -1,49 +1,98 @@
 <script setup lang="ts">
-import type { DailySalesSKUListResponse } from '@/types/api/sales-analytics'
-import { ref } from 'vue'
+import type { DailySalesSKUListResponse, SKURefundRateResponse } from '@/types/api/sales-analytics'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { computed } from 'vue'
 
-defineProps<{ skuList: DailySalesSKUListResponse['Data']; pageSize: number }>()
-defineEmits(['getNextPages'])
-const currentPage = ref(1)
+const props = defineProps<{
+  skuList: DailySalesSKUListResponse['Data']
+  skuRefundRate: SKURefundRateResponse['Data']
+  pageSize: number
+  currentPage: number
+  nextPageLoading: boolean
+  selectedDates: string[]
+}>()
+
+defineEmits(['getNextPages', 'nextPage', 'prevPage'])
+const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
 </script>
 <template>
-  <div>
+  <div class="overflow-x-auto">
     <table>
       <thead>
-        <tr>
-          <th>SKU</th>
-          <th>Product Name</th>
-          <th>Qty</th>
-          <th>Shipping Amount</th>
-          <th>Amount</th>
-          <th>Refund Percantage</th>
-          <th>Qty2</th>
-          <th>Amount2</th>
+        <tr class="bg-gray-200">
+          <th class="text-left p-2">SKU</th>
+          <th class="text-left p-2">Product Name</th>
+          <th>
+            <div class="flex flex-col items-end">
+              <span>{{ selectedDates[0] }}</span>
+              <span>Sales / Units</span>
+              <span class="text-right">Average Selling Price</span>
+            </div>
+          </th>
+
+          <th v-if="displayAdditionalColumn">
+            <div class="flex flex-col items-end">
+              <span>{{ selectedDates[1] }}</span>
+              <span>Sales / Units</span>
+              <span class="text-right">Average Selling Price</span>
+            </div>
+          </th>
+          <th class="text-right pr-2">
+            <div class="flex flex-col items-end">
+              <span>SKU Refund Rate</span>
+              <span class="text-xs font-normal">( Last 30 days )</span>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="sku in skuList.item.skuList.slice(
+          class="p-4 even:bg-gray-100"
+          v-for="(sku, index) in skuList.item.skuList.slice(
             (currentPage - 1) * pageSize,
             currentPage * pageSize,
           )"
           :key="sku.sku"
         >
-          <td>{{ sku.sku }}</td>
-          <td>{{ sku.productName }}</td>
-          <td>{{ sku.qty }}</td>
-          <td>{{ sku.shippingAmount }}</td>
-          <td>{{ sku.amount }}</td>
-          <td>{{ sku.refundPercantage }}</td>
-          <td>{{ sku.qty2 }}</td>
-          <td>{{ sku.amount2 }}</td>
+          <td class="p-2 text-sm">{{ sku.sku }}</td>
+          <td class="p-2 text-sm">{{ sku.productName }}</td>
+
+          <td class="p-2 justify-items-end">
+            <div
+              class="flex flex-col items-end font-medium"
+              :class="{ 'text-red-500': sku.amount / sku.qty < 0 } + ' text-green-500'"
+            >
+              <div class="flex flex-row gap-2">
+                <span>{{ skuList.Currency }} {{ sku.amount }}</span>
+                <span>/</span>
+                <span>{{ sku.qty }}</span>
+              </div>
+              <span>{{ sku.amount / sku.qty || '-' }}</span>
+            </div>
+          </td>
+
+          <td v-if="displayAdditionalColumn" class="p-2">
+            <div
+              class="flex flex-col items-end font-medium"
+              :class="{ 'text-red-500': sku.amount2 / sku.qty2 < 0 } + ' text-green-500'"
+            >
+              <div class="flex flex-row gap-2">
+                <span>{{ skuList.Currency }} {{ sku.amount2 }}</span>
+                <span>/</span>
+                <span>{{ sku.qty2 }}</span>
+              </div>
+              <span>{{ sku.amount2 / sku.qty2 || '-' }}</span>
+            </div>
+          </td>
+          <td class="p-2 font-medium text-sm text-right">{{ skuRefundRate[index].refundRate }}%</td>
         </tr>
       </tbody>
     </table>
+
     <div class="flex justify-center gap-2">
       <button
         class="p-2 border border-gray-300 rounded"
-        @click="currentPage--"
+        @click="$emit('prevPage')"
         v-if="currentPage > 1"
       >
         {{ '<' }}
@@ -55,15 +104,17 @@ const currentPage = ref(1)
         class="p-2 border border-gray-300 rounded"
         @click="
           () => {
+            if (nextPageLoading) return
             if (currentPage < skuList.item.skuList.length / pageSize) {
-              currentPage++
+              $emit('nextPage')
             } else {
               $emit('getNextPages', currentPage * pageSize)
             }
           }
         "
       >
-        {{ '>' }}
+        <LoadingSpinner v-if="nextPageLoading" />
+        <span v-else>{{ '>' }}</span>
       </button>
     </div>
   </div>

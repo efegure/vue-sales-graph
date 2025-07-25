@@ -64,7 +64,7 @@ export const salesAnalyticsService = {
     { marketplace, sellerId, skuList, requestedDay }: SKURefundRateRequest,
     token: string,
   ): Promise<SKURefundRateResponse> {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/data/sku-refund-rate/`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/data/get-sku-refund-rate/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

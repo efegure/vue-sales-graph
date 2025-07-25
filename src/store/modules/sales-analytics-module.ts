@@ -31,6 +31,18 @@ export const salesAnalyticsModule = {
     setSKURefundRate(state: SalesAnalyticsState, skuRefundRate: SKURefundRateResponse) {
       state.skuRefundRate = skuRefundRate.Data
     },
+    setDailySalesSKUListNextPage(
+      state: SalesAnalyticsState,
+      dailySalesSKUList: DailySalesSKUListResponse,
+    ) {
+      if (!state.dailySalesSKUList) {
+        return
+      }
+      state.dailySalesSKUList.item.skuList = [
+        ...state.dailySalesSKUList.item.skuList,
+        ...dailySalesSKUList.Data.item.skuList,
+      ]
+    },
   },
   actions: {
     async fetchDailySalesOverview(
@@ -56,8 +68,13 @@ export const salesAnalyticsModule = {
       }
       const response = await salesAnalyticsService.getDailySalesSKUList(dailySalesSKUList, token)
       if (response.ApiStatusCode === 200) {
-        commit('setDailySalesSKUList', response)
+        if (dailySalesSKUList.pageNumber > 1) {
+          commit('setDailySalesSKUListNextPage', response)
+        } else {
+          commit('setDailySalesSKUList', response)
+        }
       }
+      return response.Data.item.skuList.length
     },
     async fetchSKURefundRate(
       { commit, rootGetters }: { commit: Commit; rootGetters: RootGetters },
@@ -79,6 +96,9 @@ export const salesAnalyticsModule = {
     },
     getDailySalesSKUList(state: SalesAnalyticsState) {
       return state.dailySalesSKUList
+    },
+    getSKUList(state: SalesAnalyticsState) {
+      return state.dailySalesSKUList?.item.skuList
     },
     getSKURefundRate(state: SalesAnalyticsState) {
       return state.skuRefundRate

@@ -4,6 +4,8 @@ import { type Options, type PointClickEventObject } from 'highcharts'
 import { computed, ref } from 'vue'
 import type { DailySalesOverviewResponse } from '@/types/api/sales-analytics'
 
+const selectedColumnIndexes = ref<number[]>([])
+
 const props = defineProps<{
   data: DailySalesOverviewResponse['Data'] | null
 }>()
@@ -29,7 +31,6 @@ const handleColumnClick = (event: PointClickEventObject) => {
   }
   emit('columnSelect', selectedColumnIndexes.value)
 }
-const selectedColumnIndexes = ref<number[]>([])
 
 const chartOptions = computed<Options>(() => {
   const items = props.data?.item ?? []
