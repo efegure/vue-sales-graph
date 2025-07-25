@@ -19,7 +19,14 @@ const handleColumnClick = (event: PointClickEventObject) => {
 const chartOptions = computed<Options>(() => {
   const items = props.data?.item ?? []
   const currency = props.data?.Currency ?? ''
-  const categories = items.map((d) => new Date(d.date).toLocaleDateString())
+  const categories = items.map((d) =>
+    new Date(d.date).toLocaleString(window.navigator.language, {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    }),
+  )
 
   const plotBands = props.selectedColumnIndexes.map((index) => ({
     from: index - 0.5,

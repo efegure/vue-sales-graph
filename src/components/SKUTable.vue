@@ -12,6 +12,7 @@ const props = defineProps<{
   selectedDates: string[]
   isLastPage: boolean
 }>()
+const lang = window.navigator.language
 
 defineEmits(['getNextPages', 'nextPage', 'prevPage'])
 const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
@@ -24,16 +25,30 @@ const displayAdditionalColumn = computed(() => props.selectedDates.length > 1)
           <th class="text-left p-2">SKU</th>
           <th class="text-left p-2">Product Name</th>
           <th class="p-2">
-            <div class="flex flex-col items-end">
-              <span>{{ selectedDates[0] }}</span>
+            <div class="flex flex-col items-end text-end">
+              <span>{{
+                new Date(selectedDates[0]).toLocaleString(lang, {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                })
+              }}</span>
               <span>Sales / Units</span>
               <span class="text-right">Average Selling Price</span>
             </div>
           </th>
 
           <th class="p-2" v-if="displayAdditionalColumn">
-            <div class="flex flex-col items-end">
-              <span>{{ selectedDates[1] }}</span>
+            <div class="flex flex-col items-end text-end">
+              <span>{{
+                new Date(selectedDates[1]).toLocaleString(lang, {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                })
+              }}</span>
               <span>Sales / Units</span>
               <span class="text-right">Average Selling Price</span>
             </div>
